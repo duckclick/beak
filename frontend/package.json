@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test:lint && npm run test:typecheck && npm run test:unit",
     "build": "sagui build",
-    "develop": "sagui develop --port 3000",
+    "develop": "sagui develop --port 7275",
     "dist": "cross-env NODE_ENV=production sagui build --optimize",
     "start": "npm run develop",
     "test:coverage": "npm run test:unit -- --coverage",
@@ -29,5 +29,8 @@
     "redux-thunk": "^2.1.0",
     "sagui": "^7.4.0",
     "webpack-inject-css-loader": "^0.1.0"
+  },
+  "dependencies": {
+    "react-router-redux": "^4.0.7"
   }
 }

@@ -1,7 +1,16 @@
-import style from './index.css'
+import 'index.scss'
 
-const div = document.createElement('div')
-div.innerHTML = '<h1>Hello World</h1>'
-div.className = style.component
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
 
-document.getElementById('root').appendChild(div)
+import store from 'app/store'
+import Routes from 'app/routes'
+
+const Root = (
+  <Provider store={store}>
+    {Routes}
+  </Provider>
+)
+
+render(Root, document.getElementById('root'))
