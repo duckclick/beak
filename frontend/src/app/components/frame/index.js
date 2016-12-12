@@ -13,7 +13,7 @@ export default class Frame extends Component {
     if (this.props.show) {
       return (
         <div>
-          <iframe src={`http://localhost:7275/recordings/${this.props.recordingId}/frames/${this.props.frameId}`} />
+          <iframe src={`http://localhost:7275/recordings/${this.props.recordingId}/frames/${this.props.frameId}`} sandbox='allow-same-origin' />
         </div>
       )
     } else {
