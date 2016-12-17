@@ -16,7 +16,6 @@ export default class Frame extends Component {
       <div className='frame' style={{display: this.props.show ? 'block' : 'none'}}>
         <iframe
           src={src}
-          sandbox=''
           frameBorder='0'
           width='100%'
           height='100%' />
