@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test:lint && npm run test:typecheck && npm run test:unit",
     "build": "sagui build",
-    "develop": "sagui develop --port 7275",
+    "develop": "sagui develop --port 7276",
     "dist": "cross-env NODE_ENV=production sagui build --optimize",
     "start": "npm run develop",
     "test:coverage": "npm run test:unit -- --coverage",

@@ -10,14 +10,21 @@ export default class Frame extends Component {
   }
 
   render () {
-    if (this.props.show) {
-      return (
-        <div>
-          <iframe src={`http://localhost:7275/recordings/${this.props.recordingId}/frames/${this.props.frameId}`} sandbox='allow-same-origin' />
-        </div>
-      )
-    } else {
-      return <div />
+    if (!this.props.show) {
+      return null
     }
+
+    const host = 'http://localhost:7275' // proxy host
+    const src = `${host}/api/recordings/${this.props.recordingId}/frames/${this.props.frameId}`
+    return (
+      <div className='frame'>
+        <iframe
+          src={src}
+          sandbox=''
+          frameBorder='0'
+          width='100%'
+          height='100%' />
+      </div>
+    )
   }
 }

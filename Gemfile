@@ -4,3 +4,8 @@ gem 'sinatra'
 gem 'rack'
 gem 'sinatra-contrib'
 gem 'rack-contrib'
+gem 'faraday'
+
+group :development do
+  gem 'pry-byebug'
+end

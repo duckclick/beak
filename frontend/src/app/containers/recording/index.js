@@ -23,6 +23,7 @@ export class Recording extends Component {
     if (this.props.recording.loading) {
       return <div>Loading...</div>
     }
+    const lastFrame = this.props.recording.playlist[this.props.recording.playlist.length - 1]
     return (
       <div className='page'>
         <p>{this.props.recordingId}:</p>
@@ -30,9 +31,11 @@ export class Recording extends Component {
           {
             this.props.recording.playlist.map((frameId) => {
               return (
-                <div key={frameId}>
-                  <Frame frameId={frameId} recordingId={this.props.recordingId} show={frameId === '1481293187008'} />
-                </div>
+                <Frame
+                  key={frameId}
+                  frameId={frameId}
+                  recordingId={this.props.recordingId}
+                  show={frameId === lastFrame} />
               )
             })
           }
