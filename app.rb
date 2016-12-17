@@ -31,6 +31,7 @@ class Beak < Sinatra::Base
 
   before do
     cache_control :no_cache
+    response.headers['Content-Security-Policy'] = "child-src 'self' http://localhost:7275"
   end
 
   get '/ping' do

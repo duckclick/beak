@@ -16,6 +16,7 @@ class BeakProxy < Sinatra::Base
     use Rack::NestedParams
 
     set(:raise_errors, false)
+    set(:protection, except: [:frame_options])
 
     set(:assets_folder_name) { 'public' }
     set(:public_folder) { File.join(Dir.pwd, settings.assets_folder_name) }
@@ -32,7 +33,8 @@ class BeakProxy < Sinatra::Base
 
   before do
     cache_control :no_cache
-    response.headers['X-Frame-Options'] = 'ALLOW-FROM http://localhost:7274'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'content-type'
   end
 
   get '/ping' do
@@ -45,8 +47,8 @@ class BeakProxy < Sinatra::Base
 
   get '*' do
     path = params['splat'].first
-    response = Faraday.new(url: 'http://localhost:9292').get(path)
-    content_type response.headers['content-type']
-    response.body
+    faraday_response = Faraday.new(url: 'http://localhost:9292').get(path)
+    content_type faraday_response.headers['content-type']
+    faraday_response.body
   end
 end

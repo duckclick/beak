@@ -10,14 +10,10 @@ export default class Frame extends Component {
   }
 
   render () {
-    if (!this.props.show) {
-      return null
-    }
-
     const host = 'http://localhost:7275' // proxy host
     const src = `${host}/api/recordings/${this.props.recordingId}/frames/${this.props.frameId}`
     return (
-      <div className='frame'>
+      <div className='frame' style={{display: this.props.show ? 'block' : 'none'}}>
         <iframe
           src={src}
           sandbox=''
