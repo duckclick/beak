@@ -11,6 +11,7 @@ export class Recording extends Component {
       recordingId: PropTypes.string.isRequired,
       recording: PropTypes.shape({
         playlist: PropTypes.arrayOf(PropTypes.string).isRequired,
+        playlistShowing: PropTypes.arrayOf(PropTypes.string).isRequired,
         loading: PropTypes.bool
       })
     }
@@ -18,7 +19,7 @@ export class Recording extends Component {
 
   render () {
     const { recording } = this.props
-    const { playlist } = recording
+    const { playlistShowing } = recording
 
     if (recording.loading) {
       return <div>Loading...</div>
@@ -31,7 +32,7 @@ export class Recording extends Component {
         </div>
         <div className='player'>
           {
-            playlist.map((frameId) => {
+            playlistShowing.map((frameId) => {
               return (
                 <Frame
                   key={frameId}
@@ -51,13 +52,13 @@ export class Recording extends Component {
   }
 
   componentDidUpdate (previousProps) {
-    if (!previousProps.recording.loading) {
-      setTimeout(() => this.scheduleNextFrame(), 5000)
+    if (previousProps.recording.loading && !this.props.recording.loading) {
+      setTimeout(() => this.scheduleNextFrame(), 3000)
     }
   }
 
   scheduleNextFrame () {
-    this.timeoutId = setTimeout(() => {
+    setTimeout(() => {
       const i = this.props.recording.playlist.indexOf(this.props.currentFrameId)
       const nextFrameId = this.props.recording.playlist[i + 1]
 
@@ -66,7 +67,7 @@ export class Recording extends Component {
         this.props.setCurrentFrame(nextFrameId)
         this.scheduleNextFrame()
       }
-    }, 1000)
+    }, 100)
   }
 }
 
