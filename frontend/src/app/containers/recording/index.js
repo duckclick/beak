@@ -26,8 +26,10 @@ export class Recording extends Component {
 
     return (
       <div className='page'>
-        <p>{this.props.recordingId}</p>
-        <div>
+        <div className='controls'>
+          <p>{this.props.recordingId}</p>
+        </div>
+        <div className='player'>
           {
             playlist.map((frameId) => {
               return (
