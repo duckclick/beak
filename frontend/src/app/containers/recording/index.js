@@ -5,10 +5,17 @@ import { fetchPlaylistFor } from 'app/actions/recordings'
 import { setCurrentFrame } from 'app/actions/frames'
 import Frame from 'app/components/frame'
 
+export const FIRST_FRAME_WAIT = 3000
+export const FRAME_WAIT = 100
+
 export class Recording extends Component {
   static get propTypes () {
     return {
+      fetchPlaylistFor: PropTypes.func.isRequired,
+      setCurrentFrame: PropTypes.func.isRequired,
+
       recordingId: PropTypes.string.isRequired,
+      currentFrameId: PropTypes.string,
       recording: PropTypes.shape({
         playlist: PropTypes.arrayOf(PropTypes.string).isRequired,
         playlistShowing: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -53,7 +60,7 @@ export class Recording extends Component {
 
   componentDidUpdate (previousProps) {
     if (previousProps.recording.loading && !this.props.recording.loading) {
-      setTimeout(() => this.scheduleNextFrame(), 3000)
+      setTimeout(() => this.scheduleNextFrame(), FIRST_FRAME_WAIT)
     }
   }
 
@@ -67,13 +74,14 @@ export class Recording extends Component {
         this.props.setCurrentFrame(nextFrameId)
         this.scheduleNextFrame()
       }
-    }, 100)
+    }, FRAME_WAIT)
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+export const mapStateToProps = (state, ownProps) => {
   return {
     recordingId: ownProps.params.recordingId,
+
     recording: state.recording,
     currentFrameId: state.currentFrameId
   }
