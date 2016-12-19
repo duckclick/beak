@@ -5,8 +5,8 @@ import {
   SET_CURRENT_FRAME
 } from 'app/actions'
 
-const SLIDING_WINDOW_SIZE = 10
-const SLIDING_POINT = 2
+const ALL_FRAMES_BUFFER_SIZE = 10
+const OLD_FRAMES_BUFFER_SIZE = 2
 
 const INITIAL_STATE = {
   playlist: [],
@@ -17,8 +17,9 @@ const INITIAL_STATE = {
 
 const slicePlaylistPreservingFrame = (playlist, frameId) => {
   const currentFrameIndex = playlist.indexOf(frameId)
-  const beginning = currentFrameIndex >= SLIDING_POINT ? currentFrameIndex - SLIDING_POINT : 0
-  const ending = beginning + SLIDING_WINDOW_SIZE
+  const beginning = currentFrameIndex >= OLD_FRAMES_BUFFER_SIZE ? currentFrameIndex - OLD_FRAMES_BUFFER_SIZE : 0
+  const ending = beginning + ALL_FRAMES_BUFFER_SIZE
+
   return playlist.slice(beginning, ending)
 }
 
@@ -32,7 +33,8 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         playlist: action.playlist,
-        playlistShowing: action.playlist.slice(0, SLIDING_WINDOW_SIZE)
+        playlistShowing: action.playlist.slice(0, ALL_FRAMES_BUFFER_SIZE
+      )
       }
 
     case RECEIVE_RECORDING_PLAYLIST_FAILURE:
