@@ -5,12 +5,20 @@ import { fetchPlaylistFor } from 'app/actions/recordings'
 import { setCurrentFrame } from 'app/actions/frames'
 import Frame from 'app/components/frame'
 
+export const FIRST_FRAME_WAIT = 3000
+export const FRAME_WAIT = 100
+
 export class Recording extends Component {
   static get propTypes () {
     return {
+      fetchPlaylistFor: PropTypes.func.isRequired,
+      setCurrentFrame: PropTypes.func.isRequired,
+
       recordingId: PropTypes.string.isRequired,
+      currentFrameId: PropTypes.string,
       recording: PropTypes.shape({
         playlist: PropTypes.arrayOf(PropTypes.string).isRequired,
+        playlistShowing: PropTypes.arrayOf(PropTypes.string).isRequired,
         loading: PropTypes.bool
       })
     }
@@ -18,7 +26,7 @@ export class Recording extends Component {
 
   render () {
     const { recording } = this.props
-    const { playlist } = recording
+    const { playlistShowing } = recording
 
     if (recording.loading) {
       return <div>Loading...</div>
@@ -26,10 +34,12 @@ export class Recording extends Component {
 
     return (
       <div className='page'>
-        <p>{this.props.recordingId}</p>
-        <div>
+        <div className='controls'>
+          <p>{this.props.recordingId}</p>
+        </div>
+        <div className='player'>
           {
-            playlist.map((frameId) => {
+            playlistShowing.map((frameId) => {
               return (
                 <Frame
                   key={frameId}
@@ -49,13 +59,13 @@ export class Recording extends Component {
   }
 
   componentDidUpdate (previousProps) {
-    if (!previousProps.recording.loading) {
-      setTimeout(() => this.scheduleNextFrame(), 5000)
+    if (previousProps.recording.loading && !this.props.recording.loading) {
+      setTimeout(() => this.scheduleNextFrame(), FIRST_FRAME_WAIT)
     }
   }
 
   scheduleNextFrame () {
-    this.timeoutId = setTimeout(() => {
+    setTimeout(() => {
       const i = this.props.recording.playlist.indexOf(this.props.currentFrameId)
       const nextFrameId = this.props.recording.playlist[i + 1]
 
@@ -64,13 +74,14 @@ export class Recording extends Component {
         this.props.setCurrentFrame(nextFrameId)
         this.scheduleNextFrame()
       }
-    }, 1000)
+    }, FRAME_WAIT)
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+export const mapStateToProps = (state, ownProps) => {
   return {
     recordingId: ownProps.params.recordingId,
+
     recording: state.recording,
     currentFrameId: state.currentFrameId
   }
