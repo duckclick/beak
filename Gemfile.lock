@@ -8,8 +8,11 @@ GEM
       multipart-post (>= 1.2, < 3)
     git-version-bump (0.15.1)
     method_source (0.8.2)
+    mini_portile2 (2.1.0)
     multi_json (1.12.1)
     multipart-post (2.0.0)
+    nokogiri (1.7.0.1)
+      mini_portile2 (~> 2.1.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -44,6 +47,7 @@ PLATFORMS
 
 DEPENDENCIES
   faraday
+  nokogiri
   pry-byebug
   rack
   rack-contrib
@@ -51,4 +55,4 @@ DEPENDENCIES
   sinatra-contrib
 
 BUNDLED WITH
-   1.13.6
+   1.13.7

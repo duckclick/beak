@@ -5,6 +5,7 @@ gem 'rack'
 gem 'sinatra-contrib'
 gem 'rack-contrib'
 gem 'faraday'
+gem 'nokogiri'
 
 group :development do
   gem 'pry-byebug'

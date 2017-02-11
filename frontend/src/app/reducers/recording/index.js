@@ -33,8 +33,7 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         playlist: action.playlist,
-        playlistShowing: action.playlist.slice(0, ALL_FRAMES_BUFFER_SIZE
-      )
+        playlistShowing: action.playlist.slice(0, ALL_FRAMES_BUFFER_SIZE)
       }
 
     case RECEIVE_RECORDING_PLAYLIST_FAILURE:

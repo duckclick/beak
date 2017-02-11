@@ -41,13 +41,37 @@ class BeakProxy < Sinatra::Base
     'PONG'
   end
 
-  get '/api/recordings/:record_id/frames/:frame_id' do
-    send_file File.join(settings.recordings_folder, params['record_id'], "#{params['frame_id']}.html")
+  # get '/api/recordings/:record_id/frames/:frame_id' do
+  #   send_file File.join(settings.recordings_folder, params['record_id'], "#{params['frame_id']}.html")
+  # end
+
+  get '/' do
+    <<~HTML
+      <html>
+        <head>
+          <script type="text/javascript" src="/__duckclick__/assets/common.js"></script>
+          <script type="text/javascript" src="/__duckclick__/assets/frame.js"></script>
+        </head>
+        <body>
+          <div id="__duckclick-root__" style="padding: 0; margin: 0; width: 100%; height: 100%;"></div>
+        </body>
+      </html>
+    HTML
+  end
+
+  get '/__duckclick__/assets/*' do
+    path = params['splat'].first
+    faraday_response = Faraday.new(url: 'http://localhost:7276').get(path)
+    content_type faraday_response.headers['content-type']
+    faraday_response.body
   end
 
   get '*' do
     path = params['splat'].first
-    faraday_response = Faraday.new(url: 'http://localhost:9292').get(path)
+    faraday_response = Faraday.new(
+      url: 'http://todomvc.com',
+      headers: { 'Host' => 'todomvc.com' }
+    ).get("/examples/react/#{path}")
     content_type faraday_response.headers['content-type']
     faraday_response.body
   end

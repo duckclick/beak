@@ -3,10 +3,14 @@ import { connect } from 'react-redux'
 
 import { fetchPlaylistFor } from 'app/actions/recordings'
 import { setCurrentFrame } from 'app/actions/frames'
-import Frame from 'app/components/frame'
+import API from 'app/api'
 
-export const FIRST_FRAME_WAIT = 3000
-export const FRAME_WAIT = 100
+export const FIRST_FRAME_WAIT = 1000
+export const FRAME_WAIT = 500
+
+const getIframe = () => {
+  return document.querySelector('.frame iframe')
+}
 
 export class Recording extends Component {
   static get propTypes () {
@@ -26,11 +30,12 @@ export class Recording extends Component {
 
   render () {
     const { recording } = this.props
-    const { playlistShowing } = recording
 
     if (recording.loading) {
       return <div>Loading...</div>
     }
+
+    const src = 'http://localhost:7275/' // proxy host
 
     return (
       <div className='page'>
@@ -38,24 +43,29 @@ export class Recording extends Component {
           <p>{this.props.recordingId}</p>
         </div>
         <div className='player'>
-          {
-            playlistShowing.map((frameId) => {
-              return (
-                <Frame
-                  key={frameId}
-                  frameId={frameId}
-                  recordingId={this.props.recordingId}
-                  show={frameId === this.props.currentFrameId} />
-              )
-            })
-          }
+          <div className='frame'>
+            <iframe
+              key='frame'
+              src={src}
+              frameBorder='0'
+              width='100%'
+              height='100%' />
+          </div>
         </div>
       </div>
     )
   }
 
+  sendMessage (message) {
+    getIframe()
+      .contentWindow
+      .postMessage(message, 'http://localhost:7275')
+  }
+
   componentDidMount () {
-    this.props.fetchPlaylistFor(this.props.recordingId)
+    getIframe().addEventListener('load', () => {
+      this.props.fetchPlaylistFor(this.props.recordingId)
+    }, false)
   }
 
   componentDidUpdate (previousProps) {
@@ -70,9 +80,13 @@ export class Recording extends Component {
       const nextFrameId = this.props.recording.playlist[i + 1]
 
       if (nextFrameId) {
-        console.log(`playing: ${nextFrameId}`)
-        this.props.setCurrentFrame(nextFrameId)
-        this.scheduleNextFrame()
+        API.Recordings
+          .frame({ recordingId: this.props.recordingId, id: nextFrameId })
+          .then((response) => {
+            this.sendMessage(JSON.stringify({ cmd: 'renderFrame', payload: response.data }))
+            this.props.setCurrentFrame(nextFrameId)
+            this.scheduleNextFrame()
+          })
       }
     }, FRAME_WAIT)
   }
