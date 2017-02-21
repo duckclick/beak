@@ -47,26 +47,23 @@ class Beak < Sinatra::Base
   end
 
   get '/api/recordings/:record_id/frames/:id' do
-    file_path = File.join(
-       settings.recordings_folder,
-       params['record_id'],
-       "#{params['id']}.html"
-     )
+    file_path = File.join(settings.recordings_folder, params['record_id'], "#{params['id']}.json")
+    track_entry = JSON.parse(File.read(file_path))
+    frame_html =  Nokogiri::HTML(track_entry['markup'])
 
-     frame_html =  Nokogiri::HTML(File.read(file_path))
-     head = frame_html.css('head').inner_html.strip
-     body = frame_html.css('body')
-     body_attributes = body.first
+    head = frame_html.css('head').inner_html.strip
+    body = frame_html.css('body')
+    body_attributes = body.first
       .attributes
       .map {|k,v| {k => v.value}}
       .reduce({}) {|result, v| result.merge(v)}
 
-     content_type :json
-     {
-       head: head,
-       body: body.inner_html.strip,
-       body_attributes: body_attributes
-     }.to_json
+    content_type :json
+    {
+      head: head,
+      body: body.inner_html.strip,
+      body_attributes: body_attributes
+    }.to_json
   end
 
   get '*' do
