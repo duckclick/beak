@@ -1,5 +1,15 @@
 # Beak
 
-rackup config.ru -p 7274 # app server
-rackup proxy.ru -p 7275  # proxy server
-npm run develop # port: 7276, dev server
+## app server
+```sh
+rackup config.ru -p 7274
+```
+
+## dev server
+On `port: 7276`
+
+```sh
+cd frontend
+yarn install
+yarn run develop
+```

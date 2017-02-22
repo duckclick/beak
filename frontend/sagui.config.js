@@ -25,8 +25,7 @@ const plugins = [
 
 module.exports = {
   pages: [
-    'index',
-    'frame'
+    'index'
   ],
   style: {
     cssModules: false

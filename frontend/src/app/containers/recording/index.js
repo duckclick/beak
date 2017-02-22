@@ -6,7 +6,7 @@ import { setCurrentFrame } from 'app/actions/frames'
 import API from 'app/api'
 
 export const FIRST_FRAME_WAIT = 1000
-export const FRAME_WAIT = 500
+export const FRAME_WAIT = 1000
 
 const getIframe = () => {
   return document.querySelector('.frame iframe')
@@ -70,7 +70,16 @@ export class Recording extends Component {
 
   componentDidUpdate (previousProps) {
     if (previousProps.recording.loading && !this.props.recording.loading) {
-      setTimeout(() => this.scheduleNextFrame(), FIRST_FRAME_WAIT)
+      setTimeout(() => {
+        this.sendMessage(JSON.stringify({
+          cmd: 'configure',
+          host: 'todomvc.com',
+          url: 'http://todomvc.com/',
+          current_path: '/examples/react'
+        }))
+
+        this.scheduleNextFrame()
+      }, FIRST_FRAME_WAIT)
     }
   }
 
