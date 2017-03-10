@@ -19,10 +19,14 @@ export class Recording extends Component {
       setCurrentFrame: PropTypes.func.isRequired,
 
       recordingId: PropTypes.string.isRequired,
-      currentFrameId: PropTypes.string,
+      currentFrameId: PropTypes.number,
       recording: PropTypes.shape({
-        playlist: PropTypes.arrayOf(PropTypes.string).isRequired,
-        playlistShowing: PropTypes.arrayOf(PropTypes.string).isRequired,
+        playlist: PropTypes.arrayOf(
+          PropTypes.shape({ created_at: PropTypes.number })
+        ).isRequired,
+        playlistShowing: PropTypes.arrayOf(
+          PropTypes.shape({ created_at: PropTypes.number })
+        ).isRequired,
         loading: PropTypes.bool
       })
     }
@@ -71,11 +75,11 @@ export class Recording extends Component {
   componentDidUpdate (previousProps) {
     if (previousProps.recording.loading && !this.props.recording.loading) {
       setTimeout(() => {
+        const playlistItem = this.props.recording.playlist[0]
+
         this.sendMessage(JSON.stringify({
           cmd: 'configure',
-          host: 'todomvc.com',
-          url: 'http://todomvc.com/',
-          current_path: '/examples/react'
+          ...playlistItem
         }))
 
         this.scheduleNextFrame()
@@ -85,15 +89,17 @@ export class Recording extends Component {
 
   scheduleNextFrame () {
     setTimeout(() => {
-      const i = this.props.recording.playlist.indexOf(this.props.currentFrameId)
-      const nextFrameId = this.props.recording.playlist[i + 1]
+      const element = this.props.recording.playlist
+        .find((item) => item.created_at === this.props.currentFrameId)
+      const i = this.props.recording.playlist.indexOf(element)
+      const nextFrame = this.props.recording.playlist[i + 1]
 
-      if (nextFrameId) {
+      if (nextFrame) {
         API.Recordings
-          .frame({ recordingId: this.props.recordingId, id: nextFrameId })
+          .frame({ recordingId: this.props.recordingId, id: nextFrame.created_at })
           .then((response) => {
             this.sendMessage(JSON.stringify({ cmd: 'renderFrame', payload: response.data }))
-            this.props.setCurrentFrame(nextFrameId)
+            this.props.setCurrentFrame(nextFrame.created_at)
             this.scheduleNextFrame()
           })
       }

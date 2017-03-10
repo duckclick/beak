@@ -16,8 +16,11 @@ const INITIAL_STATE = {
 }
 
 const slicePlaylistPreservingFrame = (playlist, frameId) => {
-  const currentFrameIndex = playlist.indexOf(frameId)
-  const beginning = currentFrameIndex >= OLD_FRAMES_BUFFER_SIZE ? currentFrameIndex - OLD_FRAMES_BUFFER_SIZE : 0
+  const currentFrameIndex = playlist.find((item) => item.created_at === frameId)
+  const beginning = currentFrameIndex >= OLD_FRAMES_BUFFER_SIZE
+    ? currentFrameIndex - OLD_FRAMES_BUFFER_SIZE
+    : 0
+
   const ending = beginning + ALL_FRAMES_BUFFER_SIZE
 
   return playlist.slice(beginning, ending)

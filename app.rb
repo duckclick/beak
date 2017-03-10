@@ -43,7 +43,16 @@ class Beak < Sinatra::Base
     playlist_files.sort!
 
     content_type :json
-    playlist_files.map { |f| File.basename(f, ".*") }.to_json
+    playlist_files.map do |file|
+      json = JSON.parse(File.read(file))
+      uri = URI(json['url'])
+      {
+        created_at: json['created_at'],
+        url: "#{uri.scheme}://#{uri.host}",
+        host: uri.host,
+        current_path: uri.path
+      }
+    end.to_json
   end
 
   get '/api/recordings/:record_id/frames/:id' do
