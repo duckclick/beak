@@ -6,7 +6,7 @@ import { setCurrentFrame } from 'app/actions/frames'
 import API from 'app/api'
 
 export const FIRST_FRAME_WAIT = 1000
-export const FRAME_WAIT = 1000
+export const DEFAULT_FRAME_WAIT = 1000
 
 const getIframe = () => {
   return document.querySelector('.frame iframe')
@@ -88,12 +88,17 @@ export class Recording extends Component {
   }
 
   scheduleNextFrame () {
-    setTimeout(() => {
-      const element = this.props.recording.playlist
-        .find((item) => item.created_at === this.props.currentFrameId)
-      const i = this.props.recording.playlist.indexOf(element)
-      const nextFrame = this.props.recording.playlist[i + 1]
+    const { playlist } = this.props.recording
+    const { currentFrameId } = this.props
+    const item = playlist.find((item) => item.created_at === currentFrameId)
+    const i = playlist.indexOf(item)
+    const nextFrame = playlist[i + 1]
 
+    const frameWait = nextFrame
+      ? nextFrame.created_at - currentFrameId
+      : DEFAULT_FRAME_WAIT
+
+    setTimeout(() => {
       if (nextFrame) {
         API.Recordings
           .frame({ recordingId: this.props.recordingId, id: nextFrame.created_at })
@@ -103,7 +108,7 @@ export class Recording extends Component {
             this.scheduleNextFrame()
           })
       }
-    }, FRAME_WAIT)
+    }, frameWait)
   }
 }
 

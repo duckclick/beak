@@ -10,7 +10,7 @@ export class Layout extends Component {
     return (
       <div className={`layout ${process.env.NODE_ENV}`}>
         <div className='body'>
-          { React.cloneElement(this.props.children)}
+          { this.props.children }
         </div>
       </div>
     )

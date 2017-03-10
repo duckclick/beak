@@ -1,7 +1,6 @@
 import forge, { configs } from 'mappersmith'
 import Promise from 'promise'
 
-console.log(configs)
 configs.Promise = Promise
 
 export default forge({
