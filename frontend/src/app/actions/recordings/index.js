@@ -1,4 +1,4 @@
-import API, { parseError } from 'app/api'
+import API from 'app/api'
 
 import {
   REQUEST_RECORDING_PLAYLIST,
@@ -25,9 +25,8 @@ export const fetchPlaylistFor = (id) => (dispatch) => {
 
   return API.Recordings
     .playlist({ id })
-    .then((response) => dispatch(receiveRecordingPlaylist(response.data)))
+    .then((response) => dispatch(receiveRecordingPlaylist(response.data())))
     .catch((response) => {
-      const error = parseError(response)
-      dispatch(receiveRecordingPlaylistFailure(error))
+      dispatch(receiveRecordingPlaylistFailure(response.data()))
     })
 }

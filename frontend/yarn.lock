@@ -3665,9 +3665,9 @@ map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
 
-mappersmith:
-  version "0.13.4"
-  resolved "https://registry.yarnpkg.com/mappersmith/-/mappersmith-0.13.4.tgz#a352d8080cdc75c3e2d70ef3e01c591e88d078b0"
+mappersmith@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/mappersmith/-/mappersmith-2.0.1.tgz#a6785e93fe47963d470aec8a69e971a1707a9828"
 
 math-expression-evaluator@^1.2.14:
   version "1.2.14"

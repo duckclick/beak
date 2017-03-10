@@ -98,7 +98,7 @@ export class Recording extends Component {
         API.Recordings
           .frame({ recordingId: this.props.recordingId, id: nextFrame.created_at })
           .then((response) => {
-            this.sendMessage(JSON.stringify({ cmd: 'renderFrame', payload: response.data }))
+            this.sendMessage(JSON.stringify({ cmd: 'renderFrame', payload: response.data() }))
             this.props.setCurrentFrame(nextFrame.created_at)
             this.scheduleNextFrame()
           })

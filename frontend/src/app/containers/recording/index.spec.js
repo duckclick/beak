@@ -8,7 +8,6 @@ import {
   FIRST_FRAME_WAIT,
   FRAME_WAIT
 } from 'app/containers/recording'
-import Frame from 'app/components/frame'
 
 const mountComponent = (props) => mount(
   <Recording {...props} />
@@ -90,38 +89,6 @@ describe('Recording', () => {
       jasmine.clock().tick(FIRST_FRAME_WAIT + 1)
       jasmine.clock().tick(FRAME_WAIT + 1)
       expect(props.setCurrentFrame).toHaveBeenCalled()
-    })
-  })
-
-  describe('when displaying specific frame', () => {
-    let wrapper
-
-    beforeEach(() => {
-      props = {
-        ...props,
-        currentFrameId: 'f15',
-        recording: {
-          loading: false,
-          playlist: ['f14', 'f15', 'f16', 'f17'],
-          playlistShowing: ['f14', 'f15', 'f16']
-        }
-      }
-      wrapper = mountComponent(props)
-    })
-
-    it('renders all frames in playlistShowing, but shows only the current one', () => {
-      expect(wrapper).toContainReact(
-        <Frame frameId='f14' recordingId='abcd-efgh-uuid' show={false} />
-      )
-      expect(wrapper).toContainReact(
-        <Frame frameId='f15' recordingId='abcd-efgh-uuid' show />
-      )
-      expect(wrapper).toContainReact(
-        <Frame frameId='f16' recordingId='abcd-efgh-uuid' show={false} />
-      )
-      expect(wrapper).not.toContainReact(
-        <Frame frameId='f17' recordingId='abcd-efgh-uuid' show={false} />
-      )
     })
   })
 })
