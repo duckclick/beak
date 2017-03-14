@@ -19,7 +19,8 @@ const backendPort = process.env.BACKEND_PORT || 7274
 
 const plugins = [
   new Webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(env)
+    'process.env.NODE_ENV': JSON.stringify(env),
+    PROXY_HOST: JSON.stringify(process.env.PROXY_HOST || 'http://localhost:7275/')
   })
 ]
 

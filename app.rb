@@ -11,6 +11,8 @@ require 'sinatra'
 require 'rack/contrib'
 
 class Beak < Sinatra::Base
+  PROXY_HOST = ENV['PROXY_HOST'] || 'http://localhost:7275'
+
   configure do
     use Rack::NestedParams
 
@@ -31,7 +33,7 @@ class Beak < Sinatra::Base
 
   before do
     cache_control :no_cache
-    response.headers['Content-Security-Policy'] = "child-src 'self' http://localhost:7275"
+    response.headers['Content-Security-Policy'] = "child-src 'self' #{PROXY_HOST}"
   end
 
   get '/ping' do

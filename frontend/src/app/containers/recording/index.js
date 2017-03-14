@@ -1,3 +1,4 @@
+/* global PROXY_HOST */
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
@@ -39,8 +40,6 @@ export class Recording extends Component {
       return <div>Loading...</div>
     }
 
-    const src = 'http://localhost:7275/' // proxy host
-
     return (
       <div className='page'>
         <div className='controls'>
@@ -50,7 +49,7 @@ export class Recording extends Component {
           <div className='frame'>
             <iframe
               key='frame'
-              src={src}
+              src={PROXY_HOST}
               frameBorder='0'
               width='100%'
               height='100%' />
@@ -63,7 +62,7 @@ export class Recording extends Component {
   sendMessage (message) {
     getIframe()
       .contentWindow
-      .postMessage(message, 'http://localhost:7275')
+      .postMessage(message, PROXY_HOST)
   }
 
   componentDidMount () {

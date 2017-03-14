@@ -1,5 +1,5 @@
 import forge, { configs } from 'mappersmith'
-import Promise from 'promise'
+import { Promise } from 'es6-promise'
 
 configs.Promise = Promise
 
