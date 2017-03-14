@@ -4,7 +4,7 @@ require 'json'
 require 'yaml'
 require 'digest'
 require 'cgi'
-require 'fileutils'
+require 'redis'
 
 require 'rack'
 require 'sinatra'
@@ -12,6 +12,8 @@ require 'rack/contrib'
 
 class Beak < Sinatra::Base
   PROXY_HOST = ENV['PROXY_HOST'] || 'http://localhost:7275'
+  REDIS_HOST = ENV['REDIS_HOST'] || 'localhost'
+  REDIS_PORT = ENV['REDIS_PORT'] || '6379'
 
   configure do
     use Rack::NestedParams
@@ -20,7 +22,7 @@ class Beak < Sinatra::Base
 
     set(:assets_folder_name) { 'public' }
     set(:public_folder) { File.join(Dir.pwd, settings.assets_folder_name) }
-    set(:recordings_folder) { '/tmp/track_entries' }
+    set(:redis) { Redis.new(host: REDIS_HOST, port: REDIS_PORT) }
   end
 
   error do
@@ -41,12 +43,12 @@ class Beak < Sinatra::Base
   end
 
   get '/api/recordings/:record_id/playlist' do
-    playlist_files = Dir[File.join(settings.recordings_folder, params['record_id'], '*')]
-    playlist_files.sort!
+    playlist_entries = settings.redis.hkeys(params['record_id']).sort
 
     content_type :json
-    playlist_files.map do |file|
-      json = JSON.parse(File.read(file))
+    playlist_entries.map do |entry_id|
+      entry = settings.redis.hget(params['record_id'], entry_id)
+      json = JSON.parse(entry)
       uri = URI(json['url'])
       {
         created_at: json['created_at'],
@@ -58,8 +60,7 @@ class Beak < Sinatra::Base
   end
 
   get '/api/recordings/:record_id/frames/:id' do
-    file_path = File.join(settings.recordings_folder, params['record_id'], "#{params['id']}.json")
-    track_entry = JSON.parse(File.read(file_path))
+    track_entry = JSON.parse(settings.redis.hget(params['record_id'], params['id']))
     frame_html =  Nokogiri::HTML(track_entry['markup'])
 
     head = frame_html.css('head').inner_html.strip

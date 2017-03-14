@@ -1,8 +1,13 @@
 # Beak
 
+Make sure redis server is running:
+```sh
+redis-server
+```
+
 ## app server
 ```sh
-rackup config.ru -p 7274
+bundle exec rackup config.ru -p 7274
 ```
 
 ## dev server
