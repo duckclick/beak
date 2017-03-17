@@ -22,7 +22,6 @@ class Beak < Sinatra::Base
 
     set(:assets_folder_name) { 'public' }
     set(:public_folder) { File.join(Dir.pwd, settings.assets_folder_name) }
-    set(:redis) { Redis.new(host: REDIS_HOST, port: REDIS_PORT) }
   end
 
   error do
@@ -43,11 +42,11 @@ class Beak < Sinatra::Base
   end
 
   get '/api/recordings/:record_id/playlist' do
-    playlist_entries = settings.redis.hkeys(params['record_id']).sort
+    playlist_entries = redis.hkeys(params['record_id']).sort
 
     content_type :json
     playlist_entries.map do |entry_id|
-      entry = settings.redis.hget(params['record_id'], entry_id)
+      entry = redis.hget(params['record_id'], entry_id)
       json = JSON.parse(entry)
       uri = URI(json['url'])
       {
@@ -60,7 +59,7 @@ class Beak < Sinatra::Base
   end
 
   get '/api/recordings/:record_id/frames/:id' do
-    track_entry = JSON.parse(settings.redis.hget(params['record_id'], params['id']))
+    track_entry = JSON.parse(redis.hget(params['record_id'], params['id']))
     frame_html =  Nokogiri::HTML(track_entry['markup'])
 
     title = frame_html.css('head/title').inner_html.strip
@@ -92,5 +91,11 @@ class Beak < Sinatra::Base
 
   get '*' do
     send_file File.join(settings.public_folder, 'assets/index.html')
+  end
+
+  private
+
+  def redis
+    @redis ||= Redis.new(host: REDIS_HOST, port: REDIS_PORT)
   end
 end

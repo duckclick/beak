@@ -8,6 +8,10 @@ gem 'faraday'
 gem 'nokogiri'
 gem 'redis'
 
+group :production do
+  gem 'puma'
+end
+
 group :development do
   gem 'pry-byebug'
 end
