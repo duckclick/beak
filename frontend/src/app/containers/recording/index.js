@@ -48,11 +48,13 @@ export class Recording extends Component {
         <div className='player'>
           <div className='frame'>
             <iframe
+              scrolling='no'
               key='frame'
               src={PROXY_HOST}
               frameBorder='0'
               width='100%'
-              height='100%' />
+              height='100%'
+            />
           </div>
         </div>
       </div>
