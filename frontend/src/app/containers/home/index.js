@@ -3,19 +3,19 @@ import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import { fetchAllRecordings } from 'app/actions/all-recordings'
+import { listRecordings } from 'app/actions/list-recordings'
 import store from 'app/store'
 
 export class Home extends Component {
   static get propTypes () {
     return {
-      fetchAllRecordings: PropTypes.func.isRequired,
+      listRecordings: PropTypes.func.isRequired,
       recordings: React.PropTypes.array.isRequired
     }
   }
 
   componentDidMount () {
-    this.props.fetchAllRecordings()
+    this.props.listRecordings()
   }
 
   datetime (timestamp) {
@@ -54,7 +54,7 @@ export const mapStateToProps = (state, ownProps) => {
 }
 
 const actionsToConnect = {
-  fetchAllRecordings
+  listRecordings
 }
 
 export default connect(

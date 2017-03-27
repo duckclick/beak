@@ -1,5 +1,5 @@
 import API from 'app/api'
 
-export const fetchAllRecordings = () => (dispatch) => {
+export const listRecordings = () => (dispatch) => {
   return API.Recordings.all()
 }
