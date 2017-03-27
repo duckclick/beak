@@ -60,7 +60,7 @@ class Beak < Sinatra::Base
 
   get '/api/recordings/:record_id/frames/:id' do
     track_entry = JSON.parse(redis.hget(params['record_id'], params['id']))
-    frame_html =  Nokogiri::HTML(track_entry['markup'])
+    frame_html =  Nokogiri::HTML(track_entry.dig('payload', 'markup'))
 
     title = frame_html.css('head/title').inner_html.strip
     links = frame_html.css('head/link').select { |l| l.get_attribute('rel') == 'stylesheet' }

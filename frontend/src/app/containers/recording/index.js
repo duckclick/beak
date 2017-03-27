@@ -93,7 +93,7 @@ export class Recording extends Component {
     const i = playlist.indexOf(item)
     const nextFrame = playlist[i + 1]
 
-    const frameWait = nextFrame
+    const frameWait = (nextFrame && currentFrameId)
       ? nextFrame.created_at - currentFrameId
       : DEFAULT_FRAME_WAIT
 

@@ -20,6 +20,7 @@ GEM
     pry-byebug (3.4.0)
       byebug (~> 9.0)
       pry (~> 0.10)
+    puma (3.6.0)
     rack (1.6.5)
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
@@ -50,6 +51,7 @@ DEPENDENCIES
   faraday
   nokogiri
   pry-byebug
+  puma
   rack
   rack-contrib
   redis
