@@ -41,6 +41,22 @@ class Beak < Sinatra::Base
     'PONG'
   end
 
+  get '/api/recordings' do
+    content_type :json
+
+    # TODO: `KEYS` should not be used in production code,
+    #       refactor store structure in Redis
+    all_recordings = redis.keys('*')
+    all_recordings.map do |key|
+      {
+        playlist_id: key,
+        frames: redis.hkeys(key).sort
+      }
+    end.sort_by do |e|
+      e[:frames].first
+    end.reverse.to_json
+  end
+
   get '/api/recordings/:record_id/playlist' do
     playlist_entries = redis.hkeys(params['record_id']).sort
 
@@ -73,9 +89,9 @@ class Beak < Sinatra::Base
 
     body = frame_html.css('body')
     body_attributes = body.first
-      .attributes
-      .map {|k,v| {k => v.value}}
-      .reduce({}) {|result, v| result.merge(v)}
+                          .attributes
+                          .map { |k, v| { k => v.value } }
+                          .reduce({}) { |result, v| result.merge(v) }
 
     content_type :json
     {
