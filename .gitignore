@@ -1,4 +1,7 @@
 public/
-.byebug_history
+coverage
+node_modules
+npm-debug.log
+dist
 .DS_Store
 beak.iml
