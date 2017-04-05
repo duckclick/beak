@@ -1,6 +1,8 @@
 const express = require('express')
 const redis = require('redis')
 const bluebird = require('bluebird')
+const parseUri = require('parse-uri')
+
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
@@ -64,6 +66,33 @@ app.get('/api/recordings', async (req, res, next) => {
   }
   catch(e) {
     next(e)
+  }
+})
+
+app.get('/api/recordings/:record_id/playlist', async (req, res, next) => {
+  try {
+    const playlistEntries = (await redisClient.hkeysAsync(req.params.record_id))
+
+    const entries = await Promise.all(
+      playlistEntries.sort().map(async (entry_id) => {
+        try {
+          const entry = await redisClient.hgetAsync(req.params.record_id, entry_id)
+          const json = JSON.parse(entry)
+          const uri = parseUri(json.url)
+
+          return {
+            created_at: json.created_at,
+            url: `${uri.protocol}://${uri.host}`,
+            host: uri.host,
+            current_path: uri.path
+          }
+        } catch (err) {
+          next(err)
+        }
+      }))
+    res.json(entries)
+  } catch (err) {
+    next(err)
   }
 })
 
