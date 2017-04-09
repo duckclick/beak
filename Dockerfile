@@ -25,4 +25,4 @@ RUN cd frontend && yarn install
 
 ADD . .
 
-CMD [ "/bin/sh", "-c", "cd frontend && /root/.yarn/bin/yarn dist && cd - && bundle exec rackup config.ru -p 7274 -o 0.0.0.0 -E production -s puma"]
+CMD [ "/bin/sh", "-c", "cd frontend && /root/.yarn/bin/yarn dist && cd - && /root/.yarn/bin/yarn run start"]

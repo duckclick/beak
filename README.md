@@ -7,10 +7,10 @@ redis-server
 
 ## app server
 ```sh
-bundle exec rackup config.ru -p 7274
+yarn run start
 ```
 
-## dev server
+## frontend dev server
 On `port: 7276`
 
 ```sh
