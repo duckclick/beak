@@ -2,6 +2,8 @@ const express = require('express')
 const redis = require('redis')
 const bluebird = require('bluebird')
 const parseUri = require('parse-uri')
+const cheerio = require('cheerio')
+const crypto = require('crypto')
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
@@ -23,11 +25,11 @@ const app = express();
 app.use(express.static('public/assets'))
 app.use(function (err, req, res, next) {
   console.error(err.stack)
-  res.status(500).json({error: err.message})
+  res.status(500).json({ error: err.message })
 })
 
 app.route('/api/*')
-  .all(function(req, res, next) {
+  .all(function (req, res, next) {
     res.set({
       'Content-Security-Policy': `child-src 'self' ${PROXY_HOST}`,
       'Content-Type': 'application/json',
@@ -64,7 +66,7 @@ app.get('/api/recordings', async (req, res, next) => {
     )
     res.json(recordings)
   }
-  catch(e) {
+  catch (e) {
     next(e)
   }
 })
@@ -96,11 +98,41 @@ app.get('/api/recordings/:record_id/playlist', async (req, res, next) => {
   }
 })
 
-app.get('/api/recordings/:id', (req, res) =>{
-  res.send('le_recordings with id')
+app.get('/api/recordings/:record_id/frames/:id', async (req, res, next) => {
+  console.log()
+  try {
+    const jsonEntry = await redisClient
+      .hgetAsync(req.params.record_id, req.params.id)
+    const $ = cheerio.load(JSON.parse(jsonEntry).payload.markup)
+
+    const title = $('head title').text().trim()
+    const $links = $('head link[rel=stylesheet]')
+    const linksChecksum = crypto
+      .createHash('md5')
+      .update($links.toString())
+      .digest('hex')
+
+    const linksWithId = $links.map((index, linkHtml) => {
+      cheerio(linkHtml).addClass(`link-${linksChecksum}`)
+      return linkHtml
+    }).toString()
+
+    const body = $('body')
+    res.json({
+      head: {
+        title: title,
+        links: linksWithId,
+        links_checksum: linksChecksum
+      },
+      body: body.html(),
+      body_attributes: body[0].attribs
+    })
+  } catch (err) {
+    next(err)
+  }
 })
 
-app.listen(PORT, '0.0.0.0', (err) =>{
+app.listen(PORT, '0.0.0.0', (err) => {
   if (err) {
     console.error(err);
   }
