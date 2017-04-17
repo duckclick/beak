@@ -52,10 +52,13 @@ export class Recording extends Component {
               key='frame'
               src={PROXY_HOST}
               frameBorder='0'
-              width='100%'
-              height='100%'
             />
           </div>
+          <ul className='events'>
+            <li>Event 1</li>
+            <li>Event 2</li>
+            <li>Event 3</li>
+          </ul>
         </div>
       </div>
     )
