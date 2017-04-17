@@ -1,6 +1,7 @@
 /* global PROXY_HOST */
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import { fetchPlaylistFor } from 'app/actions/recordings'
 import { setCurrentFrame } from 'app/actions/frames'
@@ -34,7 +35,7 @@ export class Recording extends Component {
   }
 
   render () {
-    const { recording } = this.props
+    const { recording, currentFrameId } = this.props
 
     if (recording.loading) {
       return <div>Loading...</div>
@@ -43,7 +44,11 @@ export class Recording extends Component {
     return (
       <div className='page'>
         <div className='controls'>
-          <p>{this.props.recordingId}</p>
+          <div className='logo'>DuckClick</div>
+          <p className='recording-info'>
+            Recording: {this.props.recordingId}
+            <div>{recording.playlist[0] && moment(recording.playlist[0].created_at, 'x').format('MMMM Do YYYY, HH A')}</div>
+          </p>
         </div>
         <div className='player'>
           <div className='frame'>
@@ -55,9 +60,19 @@ export class Recording extends Component {
             />
           </div>
           <ul className='events'>
-            <li>Event 1</li>
-            <li>Event 2</li>
-            <li>Event 3</li>
+            { recording.playlist.map((frame) => (
+              <li
+                key={frame.created_at}
+                className={frame.created_at === currentFrameId ? 'current' : 'not-current'}
+                >
+                <i className='event-icon fa fa-mouse-pointer fa-lg' aria-hidden='true' />
+                <div className='info'>
+                  <div className='timestamp'>{moment(frame.created_at, 'x').format('HH:mm:ss')}</div>
+                  <div className='path'>{frame.current_path}</div>
+                </div>
+              </li>
+              ))
+            }
           </ul>
         </div>
       </div>
