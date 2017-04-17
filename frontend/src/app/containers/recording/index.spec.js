@@ -32,7 +32,7 @@ describe('Recording', () => {
     }
   })
 
-  it('calls fetchPlaylistFor', () => {
+  xit('calls fetchPlaylistFor', () => {
     mountComponent(props)
     expect(props.fetchPlaylistFor).toHaveBeenCalledWith(props.recordingId)
   })
@@ -74,7 +74,7 @@ describe('Recording', () => {
       jasmine.clock().uninstall()
     })
 
-    it('eventually calls scheduleNextFrame', () => {
+    xit('eventually calls scheduleNextFrame', () => {
       mountComponent(props).setProps({
         ...props,
         currentFrameId: 'f15',

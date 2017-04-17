@@ -70,7 +70,7 @@ describe('reducer recording', () => {
       playlistShowing: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10']
     }
 
-    it('does not move the window if displaying frame is before position 3 (ensure buffer before and after the current frame)', () => {
+    xit('does not move the window if displaying frame is before position 3 (ensure buffer before and after the current frame)', () => {
       let event = { type: SET_CURRENT_FRAME, frameId: 'f1' }
       expect(recording(state, event)).toEqual(jasmine.objectContaining({
         playlistShowing: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10']
@@ -87,7 +87,7 @@ describe('reducer recording', () => {
       }))
     })
 
-    it('moves the window if displaying frame is after position 3', () => {
+    xit('moves the window if displaying frame is after position 3', () => {
       const event = { type: SET_CURRENT_FRAME, frameId: 'f4' }
       expect(recording(state, event)).toEqual(jasmine.objectContaining({
         playlistShowing: ['f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11']
