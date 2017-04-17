@@ -1,15 +1,20 @@
-$text-color: #444;
-$menu-color: #E9E9E9;
+$text-color: #F0F2EB;
+$menu-color: #FF4242;
 $primary-background-color: #F5F5F5;
-$event-color: #D7E4EC;
+$not-active-event-color: #D7E4EC;
+$active-event-color: #C0D6E4;
 $event-border-color: #C0D6E4;
-$event-text-color: $text-color;
+$event-text-color: #444;
+$logo-font-family: "Lobster", "Helvetica", "Arial", sans-serif;
+$normal-font-family: "Helvetica", "Arial", sans-serif;
+
+@import url(https://fonts.googleapis.com/css?family=Lobster);
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css);
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Helvetica", "Arial", sans-serif;
+  font-family: $normal-font-family;
   color: $text-color;
   background-color: $primary-background-color;
 }

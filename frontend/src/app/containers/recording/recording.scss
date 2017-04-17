@@ -2,9 +2,17 @@
   flex-direction: column;
 
   .controls {
+    display: flex;
+    align-items: center;
     background-color: $menu-color;
-    height: 63px;
+    min-height: 63px;
     padding-left: 15px;
+
+    .logo {
+      font-size: xx-large;
+      font-family: $logo-font-family;
+      margin-right: 30px;
+    }
   }
 
   .player {
