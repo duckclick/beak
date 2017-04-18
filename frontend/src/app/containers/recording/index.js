@@ -6,6 +6,7 @@ import moment from 'moment'
 import { fetchPlaylistFor } from 'app/actions/recordings'
 import { setCurrentFrame } from 'app/actions/frames'
 import API from 'app/api'
+import { EventsPanel } from 'app/containers/events-panel'
 
 export const FIRST_FRAME_WAIT = 1000
 export const DEFAULT_FRAME_WAIT = 1000
@@ -47,33 +48,14 @@ export class Recording extends Component {
           <div className='logo'>DuckClick</div>
           <p className='recording-info'>
             Recording: {this.props.recordingId}
-            <div>{recording.playlist[0] && moment(recording.playlist[0].created_at, 'x').format('MMMM Do YYYY, HH A')}</div>
+            <div>{this.recordingTime()}</div>
           </p>
         </div>
         <div className='player'>
           <div className='frame'>
-            <iframe
-              scrolling='no'
-              key='frame'
-              src={PROXY_HOST}
-              frameBorder='0'
-            />
+            <iframe scrolling='no' key='frame' src={PROXY_HOST} frameBorder='0' />
           </div>
-          <ul className='events'>
-            { recording.playlist.map((frame) => (
-              <li
-                key={frame.created_at}
-                className={frame.created_at === currentFrameId ? 'current' : 'not-current'}
-                >
-                <i className='event-icon fa fa-mouse-pointer fa-lg' aria-hidden='true' />
-                <div className='info'>
-                  <div className='timestamp'>{moment(frame.created_at, 'x').format('HH:mm:ss')}</div>
-                  <div className='path'>{frame.current_path}</div>
-                </div>
-              </li>
-              ))
-            }
-          </ul>
+          <EventsPanel currentEventId={currentFrameId} events={recording.playlist} />
         </div>
       </div>
     )
@@ -128,6 +110,11 @@ export class Recording extends Component {
           })
       }
     }, frameWait)
+  }
+
+  recordingTime () {
+    const { recording } = this.props
+    recording.playlist[0] && moment(recording.playlist[0].created_at, 'x').format('MMMM Do YYYY, HH A')
   }
 }
 
