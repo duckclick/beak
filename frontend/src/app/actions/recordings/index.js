@@ -6,7 +6,7 @@ import {
   RECEIVE_RECORDING_PLAYLIST_FAILURE
 } from 'app/actions'
 
-const requestRequestPlaylist = () => ({
+const requestRecordingPlaylist = () => ({
   type: REQUEST_RECORDING_PLAYLIST
 })
 
@@ -21,7 +21,7 @@ const receiveRecordingPlaylistFailure = (apiError) => ({
 })
 
 export const fetchPlaylistFor = (id) => (dispatch) => {
-  dispatch(requestRequestPlaylist())
+  dispatch(requestRecordingPlaylist())
 
   return API.Recordings
     .playlist({ id })
