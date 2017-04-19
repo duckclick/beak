@@ -1,0 +1,40 @@
+.page {
+  flex-direction: column;
+
+  .header {
+    display: flex;
+    align-items: center;
+    background-color: $menu-color;
+    min-height: 63px;
+    padding-left: 15px;
+    color: $light-text-color;
+
+    .logo {
+      font-size: xx-large;
+      font-family: $logo-font-family;
+      margin-right: 30px;
+    }
+  }
+
+  .recordings {
+    .recordings-list {
+      list-style-type: none;
+      margin-top: 0;
+      padding: 0px 15px;
+
+      li {
+        margin: 10px 0px;
+        padding: 10px;
+        border: 1px solid $box-border-color;
+        border-radius: 5px;
+        background-color: $not-active-box-color;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: $active-box-color;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
