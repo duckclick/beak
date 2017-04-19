@@ -1,9 +1,10 @@
-$text-color: #F0F2EB;
+$light-text-color: #F0F2EB;
+$dark-text-color: #333;
 $menu-color: #FF4242;
 $primary-background-color: #F5F5F5;
-$not-active-event-color: #D7E4EC;
-$active-event-color: #C0D6E4;
-$event-border-color: #C0D6E4;
+$not-active-box-color: #D7E4EC;
+$active-box-color: #C0D6E4;
+$box-border-color: #C0D6E4;
 $event-text-color: #444;
 $logo-font-family: "Lobster", "Helvetica", "Arial", sans-serif;
 $normal-font-family: "Helvetica", "Arial", sans-serif;
@@ -15,7 +16,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: $normal-font-family;
-  color: $text-color;
+  color: $dark-text-color;
   background-color: $primary-background-color;
 }
 

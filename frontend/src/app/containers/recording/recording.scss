@@ -7,6 +7,7 @@
     background-color: $menu-color;
     min-height: 63px;
     padding-left: 15px;
+    color: $light-text-color;
 
     .logo {
       font-size: xx-large;
@@ -25,7 +26,7 @@
       width: 15%;
       min-width: 100px;
       list-style-type: none;
-      margin: 0px;
+      margin: 0;
       padding: 0px 0px 15px 15px;
 
       li {
@@ -34,13 +35,13 @@
         padding: 10px;
         margin: 5px 0px;
         color: $event-text-color;
-        border: 1px solid $event-border-color;
+        border: 1px solid $box-border-color;
         border-radius: 5px;
-        background-color: $not-active-event-color;
+        background-color: $not-active-box-color;
         transition: background-color 0.2s ease;
 
         &.current {
-          background-color: $active-event-color;
+          background-color: $active-box-color;
         }
 
         .event-icon {
@@ -49,7 +50,7 @@
       }
 
       :first-child {
-        margin-top: 0px;
+        margin-top: 0;
       }
     }
   }
