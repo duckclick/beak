@@ -46,10 +46,10 @@ export class Recording extends Component {
       <div className='page'>
         <div className='controls'>
           <div className='logo'>DuckClick</div>
-          <p className='recording-info'>
-            Recording: {this.props.recordingId}
+          <div className='recording-info'>
+            <div>Recording: {this.props.recordingId}</div>
             <div>{this.recordingTime()}</div>
-          </p>
+          </div>
         </div>
         <div className='player'>
           <div className='frame'>
@@ -114,7 +114,7 @@ export class Recording extends Component {
 
   recordingTime () {
     const { recording } = this.props
-    recording.playlist[0] && moment(recording.playlist[0].created_at, 'x').format('MMMM Do YYYY, HH A')
+    return recording.playlist[0] && moment(recording.playlist[0].created_at, 'x').format('MMMM Do YYYY, HH A')
   }
 }
 
