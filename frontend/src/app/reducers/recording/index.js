@@ -12,6 +12,7 @@ const INITIAL_STATE = {
   playlist: [],
   playlistShowing: [],
   loading: false,
+  playlistRequested: false,
   errorMessage: null
 }
 
@@ -29,7 +30,7 @@ const slicePlaylistPreservingFrame = (playlist, frameId) => {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case REQUEST_RECORDING_PLAYLIST:
-      return { ...state, loading: true }
+      return { ...state, loading: true, playlistRequested: true }
 
     case RECEIVE_RECORDING_PLAYLIST:
       return {

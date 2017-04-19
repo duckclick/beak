@@ -32,8 +32,10 @@ describe('Recording', () => {
     }
   })
 
-  xit('calls fetchPlaylistFor', () => {
-    mountComponent(props)
+  it('calls fetchPlaylistFor', () => {
+    props.recording.loading = false
+    let recording = mountComponent(props)
+    recording.instance().handleIframeLoaded()
     expect(props.fetchPlaylistFor).toHaveBeenCalledWith(props.recordingId)
   })
 

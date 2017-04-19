@@ -11,10 +11,6 @@ import { EventsPanel } from 'app/containers/events-panel'
 export const FIRST_FRAME_WAIT = 1000
 export const DEFAULT_FRAME_WAIT = 1000
 
-const getIframe = () => {
-  return document.querySelector('.frame iframe')
-}
-
 export class Recording extends Component {
   static get propTypes () {
     return {
@@ -30,7 +26,8 @@ export class Recording extends Component {
         playlistShowing: PropTypes.arrayOf(
           PropTypes.shape({ created_at: PropTypes.number })
         ).isRequired,
-        loading: PropTypes.bool
+        loading: PropTypes.bool,
+        playlistRequested: PropTypes.bool
       })
     }
   }
@@ -53,7 +50,14 @@ export class Recording extends Component {
         </div>
         <div className='player'>
           <div className='frame'>
-            <iframe scrolling='no' key='frame' src={PROXY_HOST} frameBorder='0' />
+            <iframe
+              ref='iframe'
+              scrolling='no'
+              key='frame'
+              src={PROXY_HOST}
+              frameBorder='0'
+              onLoad={this.handleIframeLoaded.bind(this)}
+            />
           </div>
           <EventsPanel currentEventId={currentFrameId} events={recording.playlist} />
         </div>
@@ -62,15 +66,17 @@ export class Recording extends Component {
   }
 
   sendMessage (message) {
-    getIframe()
+    this.getIframe()
       .contentWindow
       .postMessage(message, PROXY_HOST)
   }
 
-  componentDidMount () {
-    getIframe().addEventListener('load', () => {
-      this.props.fetchPlaylistFor(this.props.recordingId)
-    }, false)
+  handleIframeLoaded () {
+    !this.props.recording.playlistRequested && this.props.fetchPlaylistFor(this.props.recordingId)
+  }
+
+  getIframe () {
+    return this.refs.iframe
   }
 
   componentDidUpdate (previousProps) {
