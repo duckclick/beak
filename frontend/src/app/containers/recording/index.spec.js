@@ -1,17 +1,13 @@
 import React from 'react'
 import jasmineEnzyme from 'jasmine-enzyme'
+import { install, uninstall, mockClient } from 'mappersmith/test'
 import { mount } from 'enzyme'
 
-import {
-  Recording,
-  mapStateToProps,
-  FIRST_FRAME_WAIT,
-  FRAME_WAIT
-} from 'app/containers/recording'
+import API from 'app/api'
 
-const mountComponent = (props) => mount(
-  <Recording {...props} />
-)
+import { Recording, mapStateToProps, FIRST_FRAME_WAIT, FRAME_WAIT } from 'app/containers/recording'
+
+const mountComponent = props => mount(<Recording {...props} />)
 
 describe('Recording', () => {
   let props
@@ -42,10 +38,10 @@ describe('Recording', () => {
   describe('mapStateToProps', () => {
     it('maps state to correct props', () => {
       const state = {
-        currentFrameId: 'f15',
+        currentFrameId: 2,
         recording: {
-          playlist: ['f14', 'f15', 'f16'],
-          playlistShowing: ['f14', 'f15', 'f16'],
+          playlist: [{ created_at: 1 }, { created_at: 2 }, { created_at: 3 }],
+          playlistShowing: [{ created_at: 1 }, { created_at: 2 }, { created_at: 3 }],
           loading: false
         }
       }
@@ -57,10 +53,10 @@ describe('Recording', () => {
 
       expect(mapStateToProps(state, ownProps)).toEqual({
         recordingId: 'abcd-efgh-uuid',
-        currentFrameId: 'f15',
+        currentFrameId: 2,
         recording: {
-          playlist: ['f14', 'f15', 'f16'],
-          playlistShowing: ['f14', 'f15', 'f16'],
+          playlist: [{ created_at: 1 }, { created_at: 2 }, { created_at: 3 }],
+          playlistShowing: [{ created_at: 1 }, { created_at: 2 }, { created_at: 3 }],
           loading: false
         }
       })
@@ -69,21 +65,29 @@ describe('Recording', () => {
 
   describe('when recording is loaded', () => {
     beforeEach(() => {
+      install()
       jasmine.clock().install()
     })
 
     afterEach(() => {
+      uninstall()
       jasmine.clock().uninstall()
     })
 
     xit('eventually calls scheduleNextFrame', () => {
+      mockClient(API)
+        .resource('Recordings')
+        .method('frame')
+        .with({ recordingId: 'abcd-efgh-uuid', id: 3 })
+        .response()
+
       mountComponent(props).setProps({
         ...props,
-        currentFrameId: 'f15',
+        currentFrameId: 2,
         recording: {
           loading: false,
-          playlist: ['f14', 'f15', 'f16', 'f17'],
-          playlistShowing: ['f14', 'f15', 'f16']
+          playlist: [{ created_at: 1 }, { created_at: 2 }, { created_at: 3 }, { created_at: 4 }],
+          playlistShowing: [{ created_at: 1 }, { created_at: 2 }, { created_at: 3 }]
         }
       })
 
