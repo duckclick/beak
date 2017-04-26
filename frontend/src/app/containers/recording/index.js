@@ -66,9 +66,8 @@ export class Recording extends Component {
   }
 
   sendMessage (message) {
-    this.getIframe()
-      .contentWindow
-      .postMessage(message, PROXY_HOST)
+    let contentWindow = this.getIframe().contentWindow
+    contentWindow && contentWindow.postMessage(message, PROXY_HOST)
   }
 
   handleIframeLoaded () {
