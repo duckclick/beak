@@ -119,7 +119,10 @@ export class Recording extends Component {
 
   recordingTime () {
     const { recording } = this.props
-    return recording.playlist[0] && moment(recording.playlist[0].created_at, 'x').format('MMMM Do YYYY, HH A')
+    return (
+      recording.playlist[0] &&
+      moment(recording.playlist[0].created_at, 'x').format('MMMM Do YYYY, h A')
+    )
   }
 }
 
