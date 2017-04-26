@@ -23,7 +23,7 @@
     "enzyme": "^2.6.0",
     "es6-promise": "^4.0.5",
     "jasmine-enzyme": "^2.0.0",
-    "mappersmith": "^2.0.1",
+    "mappersmith": "^2.4.0",
     "mappersmith-redux-middleware": "^0.1.0",
     "moment": "^2.18.1",
     "react": "^15.4.1",
@@ -35,6 +35,8 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "sagui": "^7.4.0",
-    "webpack-inject-css-loader": "^0.1.0"
+    "webpack-inject-css-loader": "^0.1.0",
+    "karma": "^1.6.0",
+    "karma-phantomjs-launcher": "^1.0.4"
   }
 }
